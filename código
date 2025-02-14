@@ -1,0 +1,91 @@
+-- Criando a tabela Cliente
+CREATE TABLE IF NOT EXISTS cliente (
+    id_cliente SERIAL PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL
+);
+
+-- Inserindo dados na tabela Cliente
+INSERT INTO cliente (nome) VALUES 
+('Ana Pereira'),
+('Ricardo Lima'),
+('Juliana Costa');
+
+-- Criando a tabela Endereco
+CREATE TABLE IF NOT EXISTS endereco (
+    id_endereco SERIAL PRIMARY KEY,
+    numero VARCHAR(10) NOT NULL,
+    rua VARCHAR(100) NOT NULL,
+    cidade VARCHAR(50) NOT NULL,
+    id_cliente INT NOT NULL,
+    CONSTRAINT fk_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+);
+
+-- Inserindo dados na tabela Endereco
+INSERT INTO endereco (numero, rua, cidade, id_cliente) VALUES 
+('101', 'Rua das Flores', 'Natal', 1),
+('202', 'Av. Central', 'Recife', 2),
+('303', 'Praça das Árvores', 'Fortaleza', 3);
+
+-- Criando a tabela Telefone
+CREATE TABLE IF NOT EXISTS telefone (
+    id_telefone SERIAL PRIMARY KEY,
+    numero CHAR(11) NOT NULL,
+    id_cliente INT NOT NULL,
+    CONSTRAINT fk_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+);
+
+-- Inserindo dados na tabela Telefone
+INSERT INTO telefone (numero, id_cliente) VALUES 
+('84956254875', 1),
+('81987542157', 2),
+('85987456321', 3);
+
+-- Criando a tabela Produto
+CREATE TABLE IF NOT EXISTS produto (
+    id_produto SERIAL PRIMARY KEY,
+    tipo VARCHAR(30) NOT NULL,
+    id_produtor INT NOT NULL
+);
+
+-- Inserindo dados na tabela Produto
+INSERT INTO produto (tipo, id_produtor) VALUES 
+('Eletrônicos', 1),
+('Roupas', 2),
+('Alimentos', 3);
+
+-- Criando a tabela Compra
+CREATE TABLE IF NOT EXISTS compra (
+    id_compra SERIAL PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    id_produto INT NOT NULL,
+    valor NUMERIC(10,2) NOT NULL,
+    CONSTRAINT fk_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
+    CONSTRAINT fk_produto FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+);
+
+-- Inserindo dados na tabela Compra
+INSERT INTO compra (id_cliente, id_produto, valor) VALUES 
+(1, 1, 1500.00),
+(2, 2, 120.00),
+(3, 3, 10.50);
+
+-- Criando a tabela Nota Fiscal
+CREATE TABLE IF NOT EXISTS nota_fiscal (
+    id_nota SERIAL PRIMARY KEY,
+    id_compra INT NOT NULL,
+    CONSTRAINT fk_compra FOREIGN KEY (id_compra) REFERENCES compra(id_compra)
+);
+
+-- Inserindo dados na tabela Nota Fiscal
+INSERT INTO nota_fiscal (id_compra) VALUES 
+(1),
+(2),
+(3);
+
+
+SELECT * FROM cliente
+SELECT * FROM endereco
+SELECT * FROM telefone
+SELECT * FROM produto
+SELECT * FROM compra
+SELECT * FROM nota_fiscal
